@@ -34,10 +34,8 @@
       align-items: center;
       justify-content: center;
       color: var(--text);
-      position: relative;
     }
 
-    /* Full page server box */
     .server-box {
       background: var(--panel);
       border: 1px solid var(--border);
@@ -92,7 +90,23 @@
       font-weight: bold;
     }
 
-    /* Buttons */
+    /* Copy-to-clipboard server address */
+    .copy {
+      color: var(--accent);
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .copy:hover {
+      text-decoration: underline;
+    }
+
+    .copied {
+      color: var(--green);
+      font-size: 0.9rem;
+      margin-left: 6px;
+    }
+
     .button {
       padding: 12px 24px;
       background: var(--accent);
@@ -111,13 +125,18 @@
       transform: translateY(-2px);
     }
 
-    /* Bottom-right panel button */
+    /* Fixed buttons */
     .iframe-button {
       position: fixed;
       bottom: 20px;
       right: 20px;
     }
 
+    .status-button {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+    }
   </style>
 </head>
 <body>
@@ -132,19 +151,34 @@
 
     <div class="info">
       <span class="label">Java Edition</span><br>
-      Server Address: mc.powboy1.xyz<br><br>
+      Server Address:
+      <span class="copy" onclick="copyText('mc.powboy1.xyz', this)">
+        mc.powboy1.xyz
+      </span>
+      <br><br>
 
       <span class="label">Bedrock Edition</span><br>
-      Server Address: mc.powboy1.xyz<br>
-      Port: 19132
+      Server Address:
+      <span class="copy" onclick="copyText('mc.powboy1.xyz', this)">
+        mc.powboy1.xyz
+      </span><br>
+      Port:
+      <span class="copy" onclick="copyText('19132', this)">
+        19132
+      </span>
     </div>
 
-    <!-- Sign Up Button -->
     <a href="https://forms.gle/PdGNZ79q32PCbBYq9" class="button">Sign Up!</a>
   </div>
 
-  <!-- Bottom-right button -->
-  <a href="https://projects.powboy1.xyz/" class="button iframe-button">Other Projects</a>
+  <!-- Bottom buttons -->
+  <a href="https://projects.powboy1.xyz/" class="button iframe-button">
+    Other Projects
+  </a>
+
+  <a href="https://status.powboy1.xyz" class="button status-button">
+    Status Page
+  </a>
 
 <script>
   const statusEl = document.getElementById("status");
@@ -178,6 +212,18 @@
         <span>Status unavailable</span>
       `;
     }
+  }
+
+  function copyText(text, el) {
+    navigator.clipboard.writeText(text);
+
+    let span = document.createElement("span");
+    span.className = "copied";
+    span.textContent = "Copied!";
+
+    el.after(span);
+
+    setTimeout(() => span.remove(), 1200);
   }
 
   updateStatus();
