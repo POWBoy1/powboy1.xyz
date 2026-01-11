@@ -1,202 +1,229 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>powboy1.xyz</title>
+<link rel="icon" type="image/png" href="Icon.png" />
 
-  <title>powboy1.xyz</title>
-  <link rel="icon" type="image/png" href="Icon.png" />
+<style>
+:root {
+  --bg:#0b0f1a;
+  --panel:#161b2e;
+  --border:#1e264a;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+  --green:#22c55e;
+  --red:#ef4444;
+  --accent:#7c7cff;
+}
 
-  <style>
-    :root {
-      --bg:#0b0f1a;
-      --panel:#161b2e;
-      --border:#1e264a;
-      --text:#e5e7eb;
-      --muted:#9ca3af;
-      --green:#22c55e;
-      --red:#ef4444;
-      --accent:#7c7cff;
-    }
+/* ---------- GLOBAL ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
+body {
+  height: 100vh;
+  background: radial-gradient(circle at top, #121734, var(--bg));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+}
 
-    body {
-      height: 100vh;
-      width: 100vw;
-      background: radial-gradient(circle at top, #121734, var(--bg));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text);
-    }
+/* ---------- CONTAINER ---------- */
+.server-box {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  width: 90%;
+  max-width: 520px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 
-    .server-box {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px;
-      width: 90%;
-      max-width: 520px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
+  animation: fadeUp .8s ease forwards;
+}
 
-    h1 {
-      margin-bottom: 16px;
-    }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
-    .status {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
+/* ---------- STATUS ---------- */
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: opacity .4s ease;
+}
 
-    .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--muted);
-      transition: background .3s, box-shadow .3s;
-    }
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--muted);
+}
 
-    .online .dot {
-      background: var(--green);
-      box-shadow: 0 0 10px rgba(34,197,94,.8);
-    }
+/* Pulse animation when online */
+.online .dot {
+  background: var(--green);
+  animation: pulse 1.5s infinite;
+}
 
-    .offline .dot {
-      background: var(--red);
-      box-shadow: 0 0 10px rgba(239,68,68,.8);
-    }
+.offline .dot {
+  background: var(--red);
+}
 
-    .info {
-      color: var(--muted);
-      line-height: 1.7;
-    }
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(34,197,94,.6); }
+  70%  { box-shadow: 0 0 0 10px rgba(34,197,94,0); }
+  100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+}
 
-    .label {
-      color: var(--text);
-      font-weight: bold;
-    }
+/* ---------- INFO ---------- */
+.info {
+  color: var(--muted);
+  line-height: 1.7;
+}
 
-    /* Copy-to-clipboard server address */
-    .copy {
-      color: var(--accent);
-      cursor: pointer;
-      font-weight: bold;
-    }
+.label {
+  color: var(--text);
+  font-weight: bold;
+}
 
-    .copy:hover {
-      text-decoration: underline;
-    }
+/* ---------- COPY TO CLIPBOARD ---------- */
+.copy {
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: bold;
+  display: inline-block;
+  transition: transform .15s ease, color .3s;
+}
 
-    .copied {
-      color: var(--green);
-      font-size: 0.9rem;
-      margin-left: 6px;
-    }
+.copy:hover {
+  color: #a5a5ff;
+  transform: scale(1.05);
+}
 
-    .button {
-      padding: 12px 24px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      text-decoration: none;
-      box-shadow: 0 4px 12px rgba(124,124,255,0.4);
-      transition: background .3s, transform .2s;
-    }
+.copy:active {
+  transform: scale(.95);
+}
 
-    .button:hover {
-      background: #5f5fff;
-      transform: translateY(-2px);
-    }
+.copied {
+  color: var(--green);
+  font-size: .85rem;
+  margin-left: 6px;
+  animation: popFade 1.2s forwards;
+}
 
-    /* Fixed buttons */
-    .iframe-button {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-    }
+@keyframes popFade {
+  0%   { opacity: 0; transform: translateY(4px) scale(.9); }
+  20%  { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-6px); }
+}
 
-    .status-button {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-    }
-  </style>
+/* ---------- BUTTONS ---------- */
+.button {
+  padding: 12px 24px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 6px 20px rgba(124,124,255,.35);
+  transition: transform .25s ease, box-shadow .25s ease, background .3s;
+}
+
+.button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(124,124,255,.45);
+  background: #5f5fff;
+}
+
+.button:active {
+  transform: translateY(-1px);
+}
+
+/* ---------- FIXED BUTTONS ---------- */
+.iframe-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+.status-button {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+}
+</style>
 </head>
 <body>
 
-  <div class="server-box">
-    <h1>Minecraft Server Status</h1>
+<div class="server-box">
+  <h1>Minecraft Server Status</h1>
 
-    <div id="status" class="status">
-      <div class="dot"></div>
-      <span>Loading...</span>
-    </div>
-
-    <div class="info">
-      <span class="label">Java Edition</span><br>
-      Server Address:
-      <span class="copy" onclick="copyText('mc.powboy1.xyz', this)">
-        mc.powboy1.xyz
-      </span>
-      <br><br>
-
-      <span class="label">Bedrock Edition</span><br>
-      Server Address:
-      <span class="copy" onclick="copyText('mc.powboy1.xyz', this)">
-        mc.powboy1.xyz
-      </span><br>
-      Port:
-      <span class="copy" onclick="copyText('19132', this)">
-        19132
-      </span>
-    </div>
-
-    <a href="https://forms.gle/PdGNZ79q32PCbBYq9" class="button">Sign Up!</a>
+  <div id="status" class="status">
+    <div class="dot"></div>
+    <span>Loading...</span>
   </div>
 
-  <!-- Bottom buttons -->
-  <a href="https://projects.powboy1.xyz/" class="button iframe-button">
-    Other Projects
-  </a>
+  <div class="info">
+    <span class="label">Java Edition</span><br>
+    Server Address:
+    <span class="copy" onclick="copyText('mc.powboy1.xyz', this)">
+      mc.powboy1.xyz
+    </span><br><br>
 
-  <a href="https://status.powboy1.xyz" class="button status-button">
-    Status Page
-  </a>
+    <span class="label">Bedrock Edition</span><br>
+    Server Address:
+    <span class="copy" onclick="copyText('mc.powboy1.xyz', this)">
+      mc.powboy1.xyz
+    </span><br>
+    Port:
+    <span class="copy" onclick="copyText('19132', this)">
+      19132
+    </span>
+  </div>
+
+  <a href="https://forms.gle/PdGNZ79q32PCbBYq9" class="button">Sign Up!</a>
+</div>
+
+<a href="https://projects.powboy1.xyz/" class="button iframe-button">
+  Other Projects
+</a>
+
+<a href="https://status.powboy1.xyz" class="button status-button">
+  Status Page
+</a>
 
 <script>
-  const statusEl = document.getElementById("status");
-  const API = "https://api.mcsrvstat.us/2/mc.powboy1.xyz";
+const statusEl = document.getElementById("status");
+const API = "https://api.mcsrvstat.us/2/mc.powboy1.xyz";
 
-  async function updateStatus() {
-    try {
-      const res = await fetch(API, { cache: "no-store" });
-      const data = await res.json();
+async function updateStatus() {
+  statusEl.style.opacity = 0;
 
+  try {
+    const res = await fetch(API, { cache: "no-store" });
+    const data = await res.json();
+
+    setTimeout(() => {
       if (data.online) {
-        const online = data.players?.online ?? "?";
-        const max = data.players?.max ?? "?";
-
         statusEl.className = "status online";
         statusEl.innerHTML = `
           <div class="dot"></div>
-          <span>Online • ${online}/${max} players</span>
+          <span>Online • ${data.players?.online ?? "?"}/${data.players?.max ?? "?"} players</span>
         `;
       } else {
         statusEl.className = "status offline";
@@ -205,29 +232,29 @@
           <span>Offline</span>
         `;
       }
-    } catch {
-      statusEl.className = "status offline";
-      statusEl.innerHTML = `
-        <div class="dot"></div>
-        <span>Status unavailable</span>
-      `;
-    }
+      statusEl.style.opacity = 1;
+    }, 300);
+  } catch {
+    statusEl.className = "status offline";
+    statusEl.innerHTML = `
+      <div class="dot"></div>
+      <span>Status unavailable</span>
+    `;
+    statusEl.style.opacity = 1;
   }
+}
 
-  function copyText(text, el) {
-    navigator.clipboard.writeText(text);
+function copyText(text, el) {
+  navigator.clipboard.writeText(text);
+  const span = document.createElement("span");
+  span.className = "copied";
+  span.textContent = "Copied!";
+  el.after(span);
+  setTimeout(() => span.remove(), 1200);
+}
 
-    let span = document.createElement("span");
-    span.className = "copied";
-    span.textContent = "Copied!";
-
-    el.after(span);
-
-    setTimeout(() => span.remove(), 1200);
-  }
-
-  updateStatus();
-  setInterval(updateStatus, 15000);
+updateStatus();
+setInterval(updateStatus, 15000);
 </script>
 
 </body>
